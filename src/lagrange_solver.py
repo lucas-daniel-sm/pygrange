@@ -1,17 +1,11 @@
 from sympy import expand, collect, Symbol
+import json
 
 
-class MathOperations:
-    lagrange_result = {
-        'functions_list': [],
-        'simplified_functions': [],
-        'functions_times_y_list': [],
-        'final_function': None,
-        'simplified_final_function': None
-    }
+class LagrangeSolver:
     points: list
 
-    def __init__(self, points: list) -> None:
+    def __init__(self, points: list):
         self.points = points
 
     def solve(self):
@@ -25,15 +19,15 @@ class MathOperations:
             l_x = self.polynomial(i)
             l_x_simplified = self.simplify_expression(l_x, var)
             y_n = self.points[i].y
-
+            l_x_simplified_times_y = f'(({l_x_simplified}) * {y_n})'
             polynomials.append(l_x)
-            simplified_polynomials.append(self.simplify_expression(l_x, var))
-            simplified_polynomials_times_y.append(l_x_simplified)
+            simplified_polynomials.append(l_x_simplified)
+            simplified_polynomials_times_y.append(l_x_simplified_times_y)
 
             if final_polynomial is None:
-                final_polynomial = f'({l_x_simplified} * {y_n})'
+                final_polynomial = l_x_simplified_times_y
             else:
-                final_polynomial = f'{final_polynomial} + {l_x_simplified} * {y_n}'
+                final_polynomial = f'{final_polynomial} + {l_x_simplified_times_y}'
 
         return {
             'polynomials': polynomials,
@@ -61,3 +55,24 @@ class MathOperations:
     @staticmethod
     def simplify_expression(input_function, variable: Symbol):
         return expand(collect(input_function, variable))
+
+    def resultToJson(self, result: dict):
+        polynomials = list(map(self.refact_expression, result['polynomials']))
+        simplified_polynomials = list(map(self.refact_expression, result['simplified_polynomials']))
+        simplified_polynomials_times_y = list(map(self.refact_expression, result['simplified_polynomials_times_y']))
+        final_polynomial = self.refact_expression(result['final_polynomial'])
+        final_polynomial_simplified = self.refact_expression(result['final_polynomial_simplified'])
+
+        return json.dumps({
+            'polynomials': polynomials,
+            'simplified_polynomials': simplified_polynomials,
+            'simplified_polynomials_times_y': simplified_polynomials_times_y,
+            'final_polynomial': final_polynomial,
+            'final_polynomial_simplified': final_polynomial_simplified
+        }, indent=4)
+
+
+    def refact_expression(self, expression):
+        expression_string = str(expression).replace('**', '^')
+        return expression_string
+
