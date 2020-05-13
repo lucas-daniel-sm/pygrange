@@ -1,3 +1,7 @@
+#################################################
+####  PyGrange by Lucas Daniel Silva Mendes  ####
+####        CopyRigths reserved 2020         ####
+#################################################
 import json
 from cartesian_point import CartesianPoint
 from lagrange_solver import LagrangeSolver
