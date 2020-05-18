@@ -6,7 +6,6 @@ import json
 from cartesian_point import CartesianPoint
 from lagrange_solver import LagrangeSolver
 
-y_0 = 1.1414
 y_1 = 1.2649
 y_2 = 1.3784
 
