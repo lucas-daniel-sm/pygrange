@@ -75,4 +75,3 @@ class LagrangeSolver:
     def refact_expression(self, expression):
         expression_string = str(expression).replace('**', '^')
         return expression_string
-
