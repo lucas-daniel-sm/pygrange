@@ -52,10 +52,6 @@ class LagrangeSolver:
 
         return expression_string
 
-    @staticmethod
-    def simplify_expression(input_function, variable: Symbol):
-        return expand(collect(input_function, variable))
-
     def resultToJson(self, result: dict):
         polynomials = list(map(self.refact_expression, result['polynomials']))
         simplified_polynomials = list(map(self.refact_expression, result['simplified_polynomials']))
@@ -71,8 +67,16 @@ class LagrangeSolver:
             'final_polynomial_simplified': final_polynomial_simplified
         }, indent=4)
 
+    @staticmethod
+    def refact_expression_list(exp_list: list):
+        return list(map(LagrangeSolver.refact_expression, exp_list))
 
-    def refact_expression(self, expression):
+    @staticmethod
+    def refact_expression(expression):
         expression_string = str(expression).replace('**', '^')
         return expression_string
+
+    @staticmethod
+    def simplify_expression(input_function, variable: Symbol):
+        return expand(collect(input_function, variable))
 

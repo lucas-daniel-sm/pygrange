@@ -5,15 +5,33 @@
 import json
 from cartesian_point import CartesianPoint
 from lagrange_solver import LagrangeSolver
+from lagrange_error import LagrangeError
+from input import EntradaDeDados
 
-points = [
-    CartesianPoint(0, 1),
-    CartesianPoint(0.5, 4.482),
-    CartesianPoint(0.75, 9.488),
-    CartesianPoint(1, 20.086)
-]
 
-lagrange_solver = LagrangeSolver(points)
+def calcular_erro(inputs: EntradaDeDados, result: map):
+    print('\n')
+    lagrange_error = LagrangeError({
+        'lagrange_polinomial': result['final_polynomial'],
+        'function': inputs.funcao,
+        'points': inputs.pontos,
+        'point': inputs.pontoDeInteresse.x
+    })
+    lagrange_error.calculate()
+    return lagrange_error.result
+
+
+
+inputs = EntradaDeDados()
+inputs.pegarDados()
+
+lagrange_solver = LagrangeSolver(inputs.pontos)
 result = lagrange_solver.solve()
 result_json = lagrange_solver.resultToJson(result)
+
 print(result_json)
+
+if inputs.calcularErro:
+    r = calcular_erro(inputs, result)
+    jsonErro = json.dumps(r, indent=4)
+    print(f'\n{jsonErro}')
