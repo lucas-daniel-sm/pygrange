@@ -13,7 +13,7 @@ class EntradaDeDados:
 
     def __init__(self):
         self.pontos = []
-        self.calcularErro = True
+        self.calcularErro = False
         self.funcao = ''
         self.pontoDeInteresse = None
 
@@ -31,8 +31,7 @@ class EntradaDeDados:
         for ponto in self.pontos:
             print(f'\t\t({ponto.x}; {ponto.y})')
         if self.calcularErro:
-            print(
-                f'\tpontoDeInteresse: ({self.pontoDeInteresse.x}; {self.pontoDeInteresse.y})')
+            print(f'\tpontoDeInteresse: ({self.pontoDeInteresse.x}; {self.pontoDeInteresse.y})')
             print(f'\tfuncao: {self.funcao}')
 
     def coletarPontos(self):
